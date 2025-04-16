@@ -1,0 +1,6 @@
+C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\obj\Debug\net7.0\CarAuctionMS.csproj.AssemblyReference.cache
+C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\obj\Debug\net7.0\CarAuctionMS.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\obj\Debug\net7.0\CarAuctionMS.AssemblyInfoInputs.cache
+C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\obj\Debug\net7.0\CarAuctionMS.AssemblyInfo.cs
+C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\obj\Debug\net7.0\CarAuctionMS.csproj.CoreCompileInputs.cache
+C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\obj\Debug\net7.0\CarAuctionMS.sourcelink.json
