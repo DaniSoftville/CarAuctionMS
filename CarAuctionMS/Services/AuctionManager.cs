@@ -1,74 +1,81 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using CarAuctionMS.Entities;
 
 namespace CarAuctionMS.Services
 {
-    public class VehicleAuctionManager
+    public class VehicleAuctionManager : IAuctionManager
     {
-        // Reference to the VehicleManager to manage vehicles
-        private readonly VehicleManager _vehicleManager;
-
-        // A dictionary to hold the active auctions keyed by vehicle ID
+        private readonly IVehicleManager _vehicleManager;
         private readonly Dictionary<Guid, Auction> _activeAuctions;
 
-        // Constructor initializing the VehicleManager and the dictionary for active auctions
-        public VehicleAuctionManager(VehicleManager vehicleManager)
+        public VehicleAuctionManager(IVehicleManager vehicleManager)
         {
             _vehicleManager = vehicleManager ?? throw new ArgumentNullException(nameof(vehicleManager));
-            _activeAuctions = new Dictionary<Guid, Auction>(); // Ensure no duplicate field or shadowing
+            _activeAuctions = new Dictionary<Guid, Auction>();
         }
 
-        // Starts an auction for a given vehicle
-        public void StartAuction(Vehicle vehicle)
+        public void StartAuction(string vehicleId)
         {
-            // 🔍 Check if vehicle exists in the inventory
-            var allVehicles = _vehicleManager.GetAllVehicles();
-            if (!allVehicles.Any(v => v.Id == vehicle.Id))
-                throw new InvalidOperationException("Vehicle does not exist in the inventory.");
+            if (!Guid.TryParse(vehicleId, out Guid parsedId))
+                throw new ArgumentException("Invalid vehicle ID format.");
 
-            // 🔍 Check if auction is already active
+            var vehicle = _vehicleManager.GetAllVehicles().FirstOrDefault(v => v.Id == parsedId)
+                          ?? throw new InvalidOperationException("Vehicle does not exist in the inventory.");
+
+            // Check if the auction is already active for this vehicle
             if (_activeAuctions.ContainsKey(vehicle.Id))
                 throw new InvalidOperationException($"Auction for {vehicle.Model} is already active.");
 
+            // Start a new auction
             var auction = new Auction(vehicle, vehicle.StartingBid);
             auction.StartAuction();
             _activeAuctions[vehicle.Id] = auction;
 
             Console.WriteLine($"Auction started for {vehicle.Model} with starting bid {vehicle.StartingBid}.");
         }
-        // 4) c)  Places a bid on an active auction
-        public void PlaceBid(Vehicle vehicle, int bidAmount, string bidder)
-        {
-            // Check if the auction for the vehicle is active
-            if (!_activeAuctions.TryGetValue(vehicle.Id, out var auction))
-                throw new InvalidOperationException("Auction not found or closed for this vehicle.");
 
-            // Ensure the new bid is higher than the current highest bid or the vehicle's starting bid
-            if (bidAmount <= (auction.Bids.Count > 0 ? auction.Bids.Last().Amount : vehicle.StartingBid))
+
+        public void CloseAuction(string vehicleId)
+        {
+            if (!Guid.TryParse(vehicleId, out Guid parsedId))
+                throw new ArgumentException("Invalid vehicle ID format.");
+
+            if (!_activeAuctions.TryGetValue(parsedId, out var auction))
             {
-                throw new InvalidOperationException("Bid amount must be higher than the current highest bid.");
+                // Add a log for better debugging
+                Console.WriteLine($"Error: Auction not found for vehicle ID {vehicleId}.");
+                throw new InvalidOperationException("Auction not found or already closed for this vehicle.");
             }
 
-            // Create the new bid object and place it in the auction
-            var bid = new Bid(bidder, bidAmount);
+            // Close the auction
+            auction.CloseAuction();
+            _activeAuctions.Remove(parsedId);
+
+            Console.WriteLine($"Auction closed for {auction.Vehicle.Model}. Winning bid: {auction.WinningBidAmount} by {auction.WinningBidder}.");
+        }
+        public void PlaceBid(string vehicleId, Bid bid)
+        {
+            if (!Guid.TryParse(vehicleId, out Guid parsedId))
+                throw new ArgumentException("Invalid vehicle ID format.");
+
+            if (!_activeAuctions.TryGetValue(parsedId, out var auction))
+                throw new InvalidOperationException("Auction not found or closed for this vehicle.");
+
+            var currentBid = auction.Bids.Count > 0 ? auction.Bids.Last().Amount : auction.Vehicle.StartingBid;
+            if (bid.Amount <= currentBid)
+                throw new InvalidOperationException("Bid amount must be higher than the current highest bid.");
+
             auction.PlaceBid(bid);
-            // ✅ Log the bid placement
-            Console.WriteLine($"{bidder} placed a bid of {bidAmount} on {vehicle.Model}.");
+
+            Console.WriteLine($"{bid.Bidder} placed a bid of {bid.Amount} on {auction.Vehicle.Model}.");
         }
 
-        // Closes the auction for a given vehicle
-        public void CloseAuction(Vehicle vehicle)
+        public Auction? GetAuction(string vehicleId)
         {
-            if (!_activeAuctions.TryGetValue(vehicle.Id, out var auction))
-                throw new InvalidOperationException("Auction not found or already closed for this vehicle.");
+            if (!Guid.TryParse(vehicleId, out Guid parsedId))
+                throw new ArgumentException("Invalid vehicle ID format.");
 
-            // Close the auction and remove it from the active auctions
-            auction.CloseAuction();
-            _activeAuctions.Remove(vehicle.Id);
-
-            Console.WriteLine($"Auction closed for {vehicle.Model}. Winning bid: {auction.WinningBidAmount} by {auction.WinningBidder}.");
+            _activeAuctions.TryGetValue(parsedId, out var auction);
+            return auction;
         }
     }
 }

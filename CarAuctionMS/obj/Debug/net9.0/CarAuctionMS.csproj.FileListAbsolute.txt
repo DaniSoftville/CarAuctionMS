@@ -3,10 +3,15 @@ C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\bin\Debug\net9.0\CarAu
 C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\bin\Debug\net9.0\CarAuctionMS.runtimeconfig.json
 C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\bin\Debug\net9.0\CarAuctionMS.dll
 C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\bin\Debug\net9.0\CarAuctionMS.pdb
+C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\obj\Debug\net9.0\CarAuctionMS.csproj.AssemblyReference.cache
 C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\obj\Debug\net9.0\CarAuctionMS.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\obj\Debug\net9.0\CarAuctionMS.AssemblyInfoInputs.cache
 C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\obj\Debug\net9.0\CarAuctionMS.AssemblyInfo.cs
 C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\obj\Debug\net9.0\CarAuctionMS.csproj.CoreCompileInputs.cache
+C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\obj\Debug\net9.0\CarAuctionMS.sourcelink.json
+C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\obj\Debug\net9.0\CarAucti.E846E3BE.Up2Date
 C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\obj\Debug\net9.0\CarAuctionMS.dll
 C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\obj\Debug\net9.0\refint\CarAuctionMS.dll
 C:\Users\sidor\OneDrive\Desktop\CarAuctionMS\CarAuctionMS\obj\Debug\net9.0\CarAuctionMS.pdb

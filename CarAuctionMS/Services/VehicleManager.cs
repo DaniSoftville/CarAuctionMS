@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using CarAuctionMS.Entities;
 
 namespace CarAuctionMS.Services
@@ -9,25 +7,25 @@ namespace CarAuctionMS.Services
     {
         private List<Vehicle> _vehicles = new List<Vehicle>();
 
-        //1)  Add a vehicle to the system
+        // 1) Add a vehicle to the system
         public void AddVehicle(Vehicle vehicle)
         {
             // Check if the vehicle ID already exists
             if (_vehicles.Exists(v => v.Id == vehicle.Id))
             {
                 Console.WriteLine($"Error: Vehicle with ID {vehicle.Id} already exists.");
-                // or throw new InvalidOperationException($"Vehicle with ID {vehicle.Id} already exists.");
-                return;  // 	Calls return before adding the vehicle. Do not add the vehicle if it's a duplicate
+                return;  // Do not add the vehicle if it's a duplicate
             }
 
             _vehicles.Add(vehicle);
-            Console.WriteLine($"Vehicle added: {vehicle}");
+            // Printing more detailed information for the vehicle
+            Console.WriteLine($"Vehicle added: {vehicle.GetVehicleDetails()}");
         }
 
-        //2)  Search vehicles by type
+        // 2) Search vehicles by type
         public List<Vehicle> SearchVehiclesByType(VehicleType type)
         {
-            return _vehicles.FindAll(v => v.VehicleType == type);
+            return _vehicles.Where(v => v.VehicleType == type).ToList();
         }
 
         // Search vehicles by manufacturer
@@ -49,6 +47,7 @@ namespace CarAuctionMS.Services
         }
 
         // Get all vehicles
+
         public List<Vehicle> GetAllVehicles()
         {
             return _vehicles;

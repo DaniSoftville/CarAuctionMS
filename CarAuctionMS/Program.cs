@@ -1,6 +1,6 @@
-﻿using System;
-using CarAuctionMS.Entities;
-using CarAuctionMS.Services;
+﻿using CarAuctionMS.Services;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace CarAuctionMS
 {
@@ -8,89 +8,48 @@ namespace CarAuctionMS
   {
     static void Main(string[] args)
     {
-      Console.WriteLine("Hello World!");  // Check if this prints
+      // Set up the dependency injection container
+      var serviceProvider = new ServiceCollection()
+          .AddSingleton<IVehicleManager, VehicleManager>()  // Register VehicleManager
+          .AddSingleton<IAuctionManager>(provider =>
+          {
+            var vehicleManager = provider.GetRequiredService<IVehicleManager>();  // Resolve IVehicleManager dependency
+            return new VehicleAuctionManager(vehicleManager);  // Return a new instance of VehicleAuctionManager with the vehicleManager
+          })
+          .AddSingleton<AuctionService>()  // Register AuctionService to manage auction lifecycle, we need 1 instance to be shared across the app
+          .BuildServiceProvider();  // Build the service provider to resolve dependencies
+
+      // Retrieve services from the container
+      var vehicleManager = serviceProvider.GetRequiredService<IVehicleManager>();  // Get the vehicle manager instance
+      var auctionService = serviceProvider.GetRequiredService<AuctionService>();  // Get the auction service instance
+
+      Console.WriteLine("Hello World! Program started...");
 
       try
       {
-        Console.WriteLine("Program started...");
+        // Create and add vehicles to the inventory
+        VehicleService.CreateAndAddVehicles(vehicleManager);  // Use static method
 
-        // Create VehicleManager
-        VehicleManager vehicleManager = new VehicleManager();
-        Console.WriteLine("VehicleManager created...");
+        // Retrieve a specific vehicle (F-Pace) to start the auction
+        var suv = vehicleManager.GetAllVehicles().FirstOrDefault(v => v.Model == "F-Pace");
 
-        // Create and add vehicles (Using English car brands and models)
-        var sedan = new Sedan("Aston Martin", "DBX", 2021, "White", 30000, "imageUrl", 15000, 4);  // English car brand
-        var suv = new SUV("Jaguar", "F-Pace", 2022, "Black", 25000, "imageUrl", 35000, 5);  // English car brand
-        var truck = new Truck("Bentley", "Continental GT", 2021, "Red", 120000, "imageUrl", 70000, 15);  // English luxury car
-        var hatchback = new Hatchback("Mini", "Cooper", 2019, "White", 30000, "imageUrl", 15000, 5);  // British brand
-
-        Console.WriteLine("Vehicles created...");
-
-        // Add vehicles to the manager
-        vehicleManager.AddVehicle(sedan);
-        vehicleManager.AddVehicle(suv);
-        vehicleManager.AddVehicle(truck);
-        vehicleManager.AddVehicle(hatchback);
-
-        Console.WriteLine("Vehicles added to the manager...");
-
-        // Search by manufacturer
-        var astonMartinVehicles = vehicleManager.SearchVehiclesByManufacturer("Aston Martin");
-        Console.WriteLine("Searching for vehicles by manufacturer 'Aston Martin'...");
-        foreach (var vehicle in astonMartinVehicles)
+        if (suv == null)
         {
-          Console.WriteLine(vehicle.GetVehicleDetails());
+          Console.WriteLine("SUV not found in inventory.");
+          return;
         }
 
-        // Search by vehicle type
-        var sedans = vehicleManager.SearchVehiclesByType(VehicleType.Sedan);
-        Console.WriteLine("Searching for vehicles by type 'Sedan'...");
-        foreach (var vehicle in sedans)
-        {
-          Console.WriteLine(vehicle.GetVehicleDetails());
-        }
+        // Search for vehicles based on predefined criteria
+        VehicleService.SearchVehicles(vehicleManager);  // Use static method
 
-        // --- Auction Lifecycle Demonstration ---
-        Console.WriteLine("\n--- Auction Lifecycle Demo ---");
-
-        // Create VehicleAuctionManager
-        VehicleAuctionManager auctionManager = new VehicleAuctionManager(vehicleManager);
-        Console.WriteLine("AuctionManager created...");
-
-        // Start an auction for the SUV
-        auctionManager.StartAuction(suv);
-
-        // Place bids
-        auctionManager.PlaceBid(suv, 36000, "Alice");
-        auctionManager.PlaceBid(suv, 37000, "Bob");
-
-        // Optional: Print bid history (commented out for future use)
-        /*
-        var allVehicles = vehicleManager.GetAllVehicles();
-        var auction = allVehicles.FirstOrDefault(v => v.Id == suv.Id);
-        if (auction != null)
-        {
-          Console.WriteLine("Bid history:");
-          foreach (var bid in auction.Bids)
-          {
-            Console.WriteLine($"Bidder: {bid.Bidder}, Amount: {bid.Amount}");
-          }
-        }
-        */
-
-        // Close the auction
-        auctionManager.CloseAuction(suv);
-
-        Console.WriteLine("--- Auction completed ---");
-
-        // Wait for user input before closing
-        Console.WriteLine("Press Enter to exit...");
-        Console.ReadLine(); // Keep the console window open
+        // Run the auction flow using the AuctionService, delegating the entire auction lifecycle
+        auctionService.RunAuctionFlow(suv.Id.ToString());  // Pass the vehicle ID to the AuctionService
       }
       catch (Exception ex)
       {
+        // Handle any exceptions that occur during the process
         Console.WriteLine($"An error occurred: {ex.Message}");
-        Console.WriteLine(ex.StackTrace); // Log the stack trace for debugging
+        Console.WriteLine(ex.StackTrace);
       }
     }
   }

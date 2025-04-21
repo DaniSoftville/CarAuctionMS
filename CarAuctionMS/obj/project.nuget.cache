@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "jVZbSSzEVo4=",
+  "dgSpecHash": "iFBoC1vPWZw=",
   "success": true,
   "projectFilePath": "C:\\Users\\sidor\\OneDrive\\Desktop\\CarAuctionMS\\CarAuctionMS\\CarAuctionMS.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\sidor\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\9.0.4\\microsoft.extensions.dependencyinjection.9.0.4.nupkg.sha512",
+    "C:\\Users\\sidor\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\9.0.4\\microsoft.extensions.dependencyinjection.abstractions.9.0.4.nupkg.sha512"
+  ],
   "logs": []
 }

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using CarAuctionMS.Entities;
 
 namespace CarAuctionMS.Services
@@ -8,6 +6,7 @@ namespace CarAuctionMS.Services
     {
         void AddVehicle(Vehicle vehicle);
         List<Vehicle> SearchVehiclesByManufacturer(string manufacturer);
+        List<Vehicle> SearchVehiclesByType(VehicleType type);
         List<Vehicle> GetAllVehicles();
     }
 }
