@@ -46,7 +46,17 @@ This separation improves cohesion and testability.
 
 ### 3. Dependency Injection (Optional/Future)
 
-Though not required in this version, the architecture supports easy integration of dependency injection for scalability and clean separation of concerns.
+Dependency Injection (DI) has been introduced to improve the **scalability**, **maintainability**, and **testability** of the application. The main benefits include:
+
+- **Scalability**: As new features or services are added, they can be easily integrated without altering the existing logic.
+- **Maintainability**: By decoupling the system components, the code becomes easier to manage and extend.
+- **Testability**: DI makes unit testing more straightforward by allowing us to inject mock services or substitutes for real-world components.
+
+### Key Points of DI in This Project:
+
+- Services like `VehicleManager`, `AuctionManager`, and `AuctionService` are now injected into the application's components using `Microsoft.Extensions.DependencyInjection`.
+- **Singleton** and **Transient** lifetimes are used to manage service instances.
+- DI helps in creating a clean separation of concerns, where the logic of vehicle management and auction management is decoupled from the instantiation of these services.
 
 ### 4. In-Memory Storage
 
