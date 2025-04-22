@@ -33,7 +33,7 @@ namespace CarAuctionMS.Entities
         // The auction is open if it has started and has not ended yet.
         public bool IsOpen => StartedAt.HasValue && !EndedAt.HasValue;
 
-        // ✅ Constructor: initialize auction with a vehicle and a starting bid
+        //  initialize auction with a vehicle and a starting bid
         public Auction(Vehicle vehicle, int startingBid)
         {
             Vehicle = vehicle ?? throw new ArgumentNullException(nameof(vehicle));
